@@ -4,6 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -30,6 +35,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	EditText etRequest;
 	TextView tvIsConnected, tvResponse;
 	Button btSearch;
+	Date lastDate=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -104,6 +110,11 @@ public class MainActivity extends Activity implements OnClickListener{
     	    else
     	    	return false;	
     }
+    public Date convertToDate(String date) throws ParseException
+    {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK);
+		return sdf.parse(date);
+    }
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -113,25 +124,48 @@ public class MainActivity extends Activity implements OnClickListener{
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+        	int limit = 10; 
+        	ArrayList<String> songTitles=new ArrayList<String>();
         	Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
         	try {
 				JSONArray songs = new JSONArray(result);
+				if(limit>songs.length())
+					limit=songs.length();
 				Log.d("DEBUG", "Here"+songs.length());
 				StringBuilder response=new StringBuilder();
 				response.append("Number of songs found " + songs.length());
 				response.append(System.getProperty("line.separator"));
-				for(int i=0;i<songs.length();i++)
+				for(int i=0;i<limit;i++)
 				{
-					response.append(songs.getJSONObject(i).get("title").toString());
-					response.append(System.getProperty("line.separator"));
+					if(lastDate==null)
+					{
+						response.append(songs.getJSONObject(i).get("title").toString());
+						response.append(System.getProperty("line.separator"));
+						songTitles.add(songs.getJSONObject(i).get("title").toString());
+					}
+					else
+					{	
+						String currentDate=(String) songs.getJSONObject(i).get("date").toString();
+						if(lastDate.compareTo(convertToDate(currentDate))<0)
+						{
+							response.append(songs.getJSONObject(i).get("title").toString());
+							response.append(System.getProperty("line.separator"));
+							songTitles.add(songs.getJSONObject(i).get("title").toString());
+						}
+					}					
 				}
-				
+				String latestDate = (String) songs.getJSONObject(limit-1).get("date").toString();
+				lastDate = convertToDate(latestDate);
+				Log.d("DEBUG","LATEST "+lastDate.toString());
+				Log.d("DEBUG","LAST DATE IS "+lastDate.toString());
 				tvResponse.setText(response);
 				
 
 			} catch (JSONException e) {
 				tvResponse.setText("No results for this artist.");
 				Log.d("DEBUG","FAILED PARSING");
+				e.printStackTrace();
+			} catch (ParseException e) {
 				e.printStackTrace();
 			}
        }
@@ -142,6 +176,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		{
 		case R.id.btSearch:
 			String artist=etRequest.getText().toString();
+			artist=ignoreCase(artist);
 			String requestUrl="http://zasham.herokuapp.com/api/v1/songs/"+artist;
 			// call AsynTask to perform network operation on separate thread
 			new HttpAsyncTask().execute(requestUrl);
