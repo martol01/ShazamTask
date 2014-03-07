@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Iterator;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -12,31 +11,36 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
+import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.Activity;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener{
 
-	EditText etResponse;
-	TextView tvIsConnected;
+	EditText etRequest;
+	TextView tvIsConnected, tvResponse;
+	Button btSearch;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.get_request);
 
 		// get reference to the views
-		etResponse = (EditText) findViewById(R.id.etResponse);
+		etRequest = (EditText) findViewById(R.id.etRequest);
 		tvIsConnected = (TextView) findViewById(R.id.tvIsConnected);
-
+		tvResponse =(TextView) findViewById(R.id.tvResponse);
+		btSearch=(Button) findViewById(R.id.btSearch);
+		btSearch.setOnClickListener(this);
 		// check if you are connected or not
 		if(isConnected()){
 			tvIsConnected.setBackgroundColor(0xFF00CC00);
@@ -45,11 +49,6 @@ public class MainActivity extends Activity {
 		else{
 			tvIsConnected.setText("You are NOT conncted");
 		}
-
-
-		
-		// call AsynTask to perform network operation on separate thread
-		new HttpAsyncTask().execute("http://zasham.herokuapp.com/api/v1/songs");
 	}
 
 	public static String GET(String url){
@@ -90,7 +89,13 @@ public class MainActivity extends Activity {
         return result;
         
     }
-
+    public String ignoreCase(String input)
+    {
+    	String firstLetter=input.substring(0,1);
+    	String rest=input.substring(1, input.length());
+    	String result=firstLetter.toUpperCase()+rest.toLowerCase();
+    	return result;
+    }
     public boolean isConnected(){
     	ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
     	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -110,32 +115,39 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String result) {
         	Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
         	try {
-				//JSONObject json = new JSONObject();
-				//JSONArray articles = json.getJSONArray(result);
 				JSONArray songs = new JSONArray(result);
-				//Log.d("DEBUG","KEY IS "+json.get("key"));
 				Log.d("DEBUG", "Here"+songs.length());
-				String artist=(String) songs.getJSONObject(0).get("artist");
-				Log.d("DEBUG","FIRST NAME "+artist);
-				//String str = "aaaa";
-
-				//JSONArray articles = json.getJSONArray("");
-				//str += "articles length = "+json.getJSONArray("").length();
-				//str += "\n--------\n";
-				//str += "names: "+articles.getJSONObject(0).names();
-				//str += "\n--------\n";
-				//str += "url: "+articles.getJSONObject(0).getString("url");
-				//Log.d("DEBUG", "LENGTH IS "+str);
-				//etResponse.setText(str);
+				StringBuilder response=new StringBuilder();
+				response.append("Number of songs found " + songs.length());
+				response.append(System.getProperty("line.separator"));
+				for(int i=0;i<songs.length();i++)
+				{
+					response.append(songs.getJSONObject(i).get("title").toString());
+					response.append(System.getProperty("line.separator"));
+				}
 				
-	        	//etResponse.setText(json.toString(1));
+				tvResponse.setText(response);
+				
 
 			} catch (JSONException e) {
+				tvResponse.setText("No results for this artist.");
 				Log.d("DEBUG","FAILED PARSING");
 				e.printStackTrace();
 			}
        }
     }
+	@Override
+	public void onClick(View v) {
+		switch(v.getId())
+		{
+		case R.id.btSearch:
+			String artist=etRequest.getText().toString();
+			String requestUrl="http://zasham.herokuapp.com/api/v1/songs/"+artist;
+			// call AsynTask to perform network operation on separate thread
+			new HttpAsyncTask().execute(requestUrl);
+		}
+		
+	}
     
     
 }

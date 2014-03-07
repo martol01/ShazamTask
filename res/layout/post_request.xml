@@ -20,42 +20,47 @@
         android:layout_height="wrap_content">
  
        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:text="Name"
-            android:layout_alignBaseline="@+id/etName"/>
+           android:id="@+id/tvName"
+           android:layout_width="50dp"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/etArtist"
+           android:text="Artist" />
+
        <EditText
-            android:id="@+id/etName"
+            android:id="@+id/etArtist"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tvName"/>
+
        <TextView
-            android:id="@+id/tvCountry"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
-            android:text="Country"
-            android:layout_alignBaseline="@+id/etCountry"/>
+           android:id="@+id/tvCountry"
+           android:layout_width="50dp"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/etTitle"
+           android:layout_below="@+id/tvName"
+           android:text="Title" />
+
        <EditText
-            android:id="@+id/etCountry"
+            android:id="@+id/etTitle"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tvCountry"
-            android:layout_below="@+id/etName"/>
+            android:layout_below="@+id/etArtist"/>
+
        <TextView
-            android:id="@+id/tvTwitter"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvCountry"
-            android:text="Twitter"
-            android:layout_alignBaseline="@+id/etTwitter"/>
+           android:id="@+id/tvTwitter"
+           android:layout_width="50dp"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/etUrl"
+           android:layout_below="@+id/tvCountry"
+           android:text="Url" />
+
        <EditText
-            android:id="@+id/etTwitter"
+            android:id="@+id/etUrl"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tvTwitter"
-            android:layout_below="@+id/etCountry"/>
+            android:layout_below="@+id/etTitle"/>
    </RelativeLayout>
  
    <Button

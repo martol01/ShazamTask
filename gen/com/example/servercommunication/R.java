@@ -24,16 +24,18 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080009;
-        public static final int btnPost=0x7f080008;
-        public static final int etCountry=0x7f080005;
-        public static final int etName=0x7f080003;
-        public static final int etResponse=0x7f080001;
-        public static final int etTwitter=0x7f080007;
-        public static final int tvCountry=0x7f080004;
+        public static final int action_settings=0x7f08000b;
+        public static final int btSearch=0x7f080003;
+        public static final int btnPost=0x7f08000a;
+        public static final int etArtist=0x7f080005;
+        public static final int etRequest=0x7f080001;
+        public static final int etTitle=0x7f080007;
+        public static final int etUrl=0x7f080009;
+        public static final int tvCountry=0x7f080006;
         public static final int tvIsConnected=0x7f080000;
-        public static final int tvName=0x7f080002;
-        public static final int tvTwitter=0x7f080006;
+        public static final int tvName=0x7f080004;
+        public static final int tvResponse=0x7f080002;
+        public static final int tvTwitter=0x7f080008;
     }
     public static final class layout {
         public static final int get_request=0x7f030000;

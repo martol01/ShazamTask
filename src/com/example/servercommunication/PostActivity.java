@@ -28,17 +28,17 @@ import android.widget.Toast;
 public class PostActivity extends Activity implements OnClickListener{
 
 	TextView tvIsConnected;
-    EditText etName,etCountry,etTwitter;
+    EditText etArtist,etTitle,etUrl;
     Button btnPost;
-    Person person;
+    Song song;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.post_request);
 		tvIsConnected = (TextView) findViewById(R.id.tvIsConnected);
-        etName = (EditText) findViewById(R.id.etName);
-        etCountry = (EditText) findViewById(R.id.etCountry);
-        etTwitter = (EditText) findViewById(R.id.etTwitter);
+        etArtist = (EditText) findViewById(R.id.etArtist);
+        etTitle = (EditText) findViewById(R.id.etTitle);
+        etUrl = (EditText) findViewById(R.id.etUrl);
         btnPost = (Button) findViewById(R.id.btnPost);
  
         // check if you are connected or not
@@ -52,7 +52,7 @@ public class PostActivity extends Activity implements OnClickListener{
         btnPost.setOnClickListener(this);	
 	}
 	
-	public static String POST(String url, Person person){
+	public static String POST(String url, Song song){
         InputStream inputStream = null;
         String result = "";
         try {
@@ -67,9 +67,9 @@ public class PostActivity extends Activity implements OnClickListener{
  
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("name", person.getName());
-            jsonObject.accumulate("country", person.getCountry());
-            jsonObject.accumulate("twitter", person.getTwitter());
+            jsonObject.accumulate("artist", song.getArtist());
+            jsonObject.accumulate("title", song.getTitle());
+            jsonObject.accumulate("url", song.getUrl());
  
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -126,7 +126,7 @@ public class PostActivity extends Activity implements OnClickListener{
             if(!validate())
                 Toast.makeText(getBaseContext(), "Enter some data!", Toast.LENGTH_LONG).show();
             // call AsynTask to perform network operation on separate thread
-            new HttpAsyncTask().execute("http://hmkcode.appspot.com/jsonservlet");
+            new HttpAsyncTask().execute("http://zasham.herokuapp.com/api/v1/songs");
         break;
     }
 	}///DO GIT CLONE OF THE APP ON HEROKU - MUSIC GAME AND TEST THIS 
@@ -134,12 +134,12 @@ public class PostActivity extends Activity implements OnClickListener{
         @Override
         protected String doInBackground(String... urls) {
  
-            person = new Person();
-            person.setName(etName.getText().toString());
-            person.setCountry(etCountry.getText().toString());
-            person.setTwitter(etTwitter.getText().toString());
+            song = new Song();
+            song.setArtist(etArtist.getText().toString());
+            song.setTitle(etTitle.getText().toString());
+            song.setUrl(etUrl.getText().toString());
  
-            return POST(urls[0],person);
+            return POST(urls[0],song);
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
@@ -149,11 +149,11 @@ public class PostActivity extends Activity implements OnClickListener{
     }
  
     private boolean validate(){
-        if(etName.getText().toString().trim().equals(""))
+        if(etArtist.getText().toString().trim().equals(""))
             return false;
-        else if(etCountry.getText().toString().trim().equals(""))
+        else if(etTitle.getText().toString().trim().equals(""))
             return false;
-        else if(etTwitter.getText().toString().trim().equals(""))
+        else if(etUrl.getText().toString().trim().equals(""))
             return false;
         else
             return true;    
