@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 
 		
 		// call AsynTask to perform network operation on separate thread
-		new HttpAsyncTask().execute("http://hidden-thicket-5301.herokuapp.com/api/v1/users");
+		new HttpAsyncTask().execute("http://zasham.herokuapp.com/api/v1/songs");
 	}
 
 	public static String GET(String url){
@@ -112,11 +112,11 @@ public class MainActivity extends Activity {
         	try {
 				//JSONObject json = new JSONObject();
 				//JSONArray articles = json.getJSONArray(result);
-				JSONArray users = new JSONArray(result);
+				JSONArray songs = new JSONArray(result);
 				//Log.d("DEBUG","KEY IS "+json.get("key"));
-				Log.d("DEBUG", "Here"+users.length());
-				String ss=(String) users.getJSONObject(0).get("username");
-				Log.d("DEBUG","FIRST NAME "+ss);
+				Log.d("DEBUG", "Here"+songs.length());
+				String artist=(String) songs.getJSONObject(0).get("artist");
+				Log.d("DEBUG","FIRST NAME "+artist);
 				//String str = "aaaa";
 
 				//JSONArray articles = json.getJSONArray("");
