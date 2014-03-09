@@ -1,8 +1,35 @@
 HOOOOME
 <div ng-controller="SongController">
-	Artist:<input type="text" ng-model="songData.artist">{{songData.artist}}
-	Title:<input type="text" ng-model="songData.title">{{songData.title}}
-	URL:<input type="text" ng-model="songData.url">{{songData.url}}
+	<!-- SONGS-->
+	TrackId:<input type="text" ng-model="songData.trackId">
+	Title:<input type="text" ng-model="songData.title">
+	ARTIST:<input type="text" ng-model="songData.artist.name">
+	Genre:<input type="text" ng-model="songData.genre.name">
+	Image100:<input type="text" ng-model="songData.images.image100">
+	Image100ios:<input type="text" ng-model="songData.images.image100ios">
+	Image400:<input type="text" ng-model="songData.images.image400">
+	Image400ios:<input type="text" ng-model="songData.images.image400ios">
+	URL:<input type="text" ng-model="songData.rdio.weburl">
+	<br/>
+-----------------------------------------------------------------------------------------
+   <!--TAGS-->
+	AccountId:<input type="text" ng-model="tagData.installation.accountId">
+	DeviceModel:<input type="text" ng-model="tagData.installation.deviceModel">
+	Timestamp:<input type="text" ng-model="tagData.timestamp">
+	Locality:<input type="text" ng-model="tagData.geolocation.region.locality">
+	Country:<input type="text" ng-model="tagData.geolocation.region.country">
+	Latitude:<input type="text" ng-model="tagData.geolocation.latitude">
+	Longitude:<input type="text" ng-model="tagData.geolocation.longitude">
+	TrackId:<input type="text" ng-model="tagData.match.track.id">
+	Track Title:<input type="text" ng-model="tagData.match.track.metadata.trackTitle">
+	Artist Name:<input type="text" ng-model="tagData.match.track.metadata.artistName">
+	<br/>
+
+
+
+	-----------------------------------
 	<a role="button" ng-click="createSong()">Create Song</a>
+	<a role="button" ng-click="createTag()">Create Tag</a>
 	<a role="button" ng-click="getSongs()">Get Songs</a>
+	<a role="button" ng-click="getSongDetails(tags.match.track.id)">Get Song Details</a>
 </div>
