@@ -1,4 +1,4 @@
-ADMIIIN
+ADMIIINCHI
 <div>
 	<a role="button" ng-click="readSongs()">READ</a>
 	<a role="button" ng-click="getSongsByArtist(artist)">Get By Artist</a>
@@ -6,9 +6,10 @@ ADMIIIN
 	URL FOR UPDATE:<input type="text" ng-model="songData.url">{{songData.url}}
 	ARTIST:<input type="text" ng-model="artist">{{artist}}
 	<br/>
-	SONGS:
+	NUMBER OF SONGS IS: {{songs.length}}
+	SONGS: 
 	<div ng-repeat="song in songs">
-		<input type="checkbox" ng-click="deleteSong(song._id)">{{song.artist.name}}
+		<input type="checkbox" ng-click="deleteSong(song._id)">{{song._id}}
 	</div>
 	TAGS:
 	<div ng-repeat="tag in tags">

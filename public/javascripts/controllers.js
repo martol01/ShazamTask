@@ -6,32 +6,17 @@ $scope.songDetails={};
 $scope.songData={};
 $scope.tagData={};
 $scope.url='/api/v1/songs/';
-$scope.urlTag="../tag.json";
-$scope.urlSongDetails="../test.json";
-
 	$scope.getSongs=function(){
-		$http.get($scope.urlTag)
+		$http.get($scope.url)
 		.success(function(data){
 		$scope.tags=data;
 		console.log(JSON.stringify(data));
-		console.log($scope.tags.match.track.id);
 		})
 		.error(function(data){
 			console.log('Error '+ JSON.stringify(data));
 		});
 	};
-	$scope.getSongDetails=function(id){
-		$http.get($scope.urlSongDetails)
-		.success(function(data){
-			$scope.songDetails=data;
-			console.log(JSON.stringify(data));
-		})
-		.error(function(data){
-			console.log('Error '+ JSON.stringify(data));
-		});
-	}
 	$scope.createSong=function(){
-		console.log("HERE1 " + JSON.stringify($scope.songData));
 		$http.post($scope.url, $scope.songData)
 	.success(function(data){
 		$scope.songData={};
@@ -43,7 +28,6 @@ $scope.urlSongDetails="../test.json";
 	});
 	}
 	$scope.createTag=function(){
-		console.log("HERE2" + JSON.stringify($scope.tagData));
 		$http.post('/api/v1/tags', $scope.tagData)
 		.success(function(data){
 			$scope.tagData={};
@@ -65,7 +49,7 @@ $scope.songData={};
 $http.get($scope.urlSongs)
 .success(function(data){
 	$scope.songs=data;
-	console.log(JSON.stringify(data));
+	console.log(JSON.stringify($scope.songs));
 })
 .error(function(data){
 	console.log("Error "+JSON.stringify(data));
@@ -92,26 +76,28 @@ $scope.updateSong=function(id){
 		.error(function(data){
 			console.log("Error "+ JSON.stringify(data));
 		});
-	}
+	};
 
 	$scope.deleteSong=function(id){
-		$http.delete($scope.url+id)
+		console.log("SONG ID IS " +id)
+		$http.delete($scope.urlSongs+id)
 		.success(function(data){
 			$scope.songs=data;
 			console.log(JSON.stringify(data));
 		})
 		.error(function(data){
-			console.log("Error "+data);
+			console.log("Error "+JSON.stringify(data));
 		});
 	};
 	$scope.deleteTag=function(id){
-		$http.delete($scope.url+id)
+		console.log("TAG ID IS "+id);
+		$http.delete($scope.urlTags+id)
 		.success(function(data){
 			$scope.tags=data;
 			console.log(JSON.stringify(data));
 		})
 		.error(function(data){
-			console.log("Error "+data);
+			console.log("Error "+JSON.stringify(data));
 		});
 	};
 	$scope.getSongsByArtist=function(artist){
